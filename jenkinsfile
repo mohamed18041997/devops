@@ -1,0 +1,86 @@
+pipeline{
+    agent any
+    stages {
+        stage('Run Container') {
+            steps {
+                script{
+                sh 'docker ps -aq | xargs docker start'
+                }
+            }
+        }
+        stage('Clone Repository') {
+            steps {
+                echo "Cloning repository"
+            }
+        }
+        stage('Building the Maven project and Docker image') {
+            steps {
+                echo "Building the Maven project and Docker image"  
+                script {
+                    def mavenHome = tool 'M2_HOME'
+                    sh "echo 'Maven Home: ${mavenHome}'"
+                    sh "ls -l ${mavenHome}/bin/" 
+                    sh "${mavenHome}/bin/mvn -version"
+                    sh "${mavenHome}/bin/mvn clean install"
+                    sh "docker build -t backend ."
+                    sh "docker tag backend yoldezdridi/backend:1.0.0"
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub_id', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "docker login --username=$USERNAME --password=$PASSWORD"
+                    }
+                    sh "docker push yoldezdridi/backend:1.0.0"
+                }
+            }  
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'sonar', variable: 'SECRET')]) { 
+                    env.SONAR_LOGIN = SECRET
+                    }}
+                    echo "Running SonarQube analysis" 
+                    sh "mvn clean install sonar:sonar \
+                        -Dsonar.login=${SONAR_LOGIN} \
+                        -Dsonar.host.url=http://localhost:9000 \
+                        -Dsonar.projectKey=backend \
+                        -Dsonar.projectName=backend \
+                        -Dsonar.verbose=true" 	                      
+                
+            }
+        }   
+        stage('Publish to Nexus') {
+                     steps {
+                         script {
+                                sh 'mvn deploy -e -DskipTests'
+                                echo 'Publish to Nexus'
+
+                }
+            }
+        } 
+        stage('Junit Test') {
+                     steps {
+                         script {
+                                sh 'mvn test'
+
+                }
+            }
+        } 
+
+        stage('Docker Compose') {
+                     steps {
+                         script {
+                                sh 'docker compose up -d'
+                                sh 'docker ps -aq | xargs docker start'
+                }
+            }
+        } 
+    }
+    post {
+        success {
+            slackSend(channel: 'devops', color: 'good', message: ":white_check_mark: Build number ${BUILD_NUMBER} ended with SUCCESS notification yoldez")
+                }
+ 
+        failure {
+            slackSend(channel: 'devops', color: 'RED', message: ":red_circle:  Build number ${BUILD_NUMBER} FAILED notification yoldez")
+            }
+    }
+    }
