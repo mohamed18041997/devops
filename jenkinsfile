@@ -13,7 +13,7 @@ pipeline{
                 script {
                     def mavenHome = tool 'M2_HOME'
                     sh "echo 'Maven Home: ${mavenHome}'"
-                    sh "ls -l ${mavenHome}/bin/" 
+                    sh "ls -l ${mavenHome}" 
                     sh "mvn -version"
                     sh "mvn clean install"
                     sh "docker build -t backend ."
