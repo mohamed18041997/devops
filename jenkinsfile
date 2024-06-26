@@ -25,7 +25,7 @@ pipeline{
                 }
             }  
         } 
-  /*       stage('SonarQube Analysis') {
+       stage('SonarQube Analysis') {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'sonar', variable: 'SECRET')]) { 
@@ -41,7 +41,7 @@ pipeline{
                 
             }
         }   
-        stage('Publish to Nexus') {
+    /*      stage('Publish to Nexus') {
                      steps {
                          script {
                                 sh 'mvn deploy -e -DskipTests'
