@@ -14,8 +14,8 @@ pipeline{
                     def mavenHome = tool 'M2_HOME'
                     sh "echo 'Maven Home: ${mavenHome}'"
                     sh "ls -l ${mavenHome}/bin/" 
-                    sh "${mavenHome}/bin/mvn -version"
-                    sh "${mavenHome}/bin/mvn clean install"
+                    sh "mvn -version"
+                    sh "mvn clean install"
                     sh "docker build -t backend ."
                     sh "docker tag backend mohamed1804/backend:1.0.0"
                     withCredentials([usernamePassword(credentialsId: 'dockerhub_id', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
