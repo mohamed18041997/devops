@@ -7,25 +7,7 @@ pipeline{
                 echo "Cloning repository"
             }
         }
-         stage('Building the Maven project and Docker image') {
-            steps {
-                echo "Building the Maven project and Docker image"  
-                script {
-                    def mavenHome = tool 'M2_HOME'
-                    sh "echo 'Maven Home: ${mavenHome}'"
-                    sh "ls -l ${mavenHome}" 
-                    sh "${mavenHome}/mvn -version"
-                    sh "${mavenHome}/mvn clean install"
-                    sh "docker build -t backend ."
-                    sh "docker tag backend mohamed1804/backend:1.0.0"
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub_id', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh "docker login --username=$USERNAME --password=$PASSWORD"
-                    }
-                    sh "docker push mohamed1804/backend:1.0.0"
-                }
-            }  
-        }  
-     /*   stage('SonarQube Analysis') {
+        stage('SonarQube Analysis') {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'sonar', variable: 'SECRET')]) { 
@@ -44,8 +26,34 @@ pipeline{
 	            }          
             }
             }
-    }   */ 
-       stage('Publish to Nexus') {
+        } 
+       /*  stage('Junit Test') {
+                     steps {
+                         script {
+                                sh 'mvn test'
+
+                }
+            }
+        } 
+        stage('Building the Maven project and Docker image') {
+            steps {
+                echo "Building the Maven project and Docker image"  
+                script {
+                    def mavenHome = tool 'M2_HOME'
+                    sh "echo 'Maven Home: ${mavenHome}'"
+                    sh "ls -l ${mavenHome}" 
+                    sh "${mavenHome}/mvn -version"
+                    sh "${mavenHome}/mvn clean install"
+                    sh "docker build -t backend ."
+                    sh "docker tag backend mohamed1804/backend:1.0.0"
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub_id', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "docker login --username=$USERNAME --password=$PASSWORD"
+                    }
+                    sh "docker push mohamed1804/backend:1.0.0"
+                }
+            }  
+        }  
+        stage('Publish to Nexus') {
                      steps {
                          script {
                                 def mavenHome = tool 'M2_HOME'
@@ -56,15 +64,6 @@ pipeline{
                 }
             }
         } 
-      /*     stage('Junit Test') {
-                     steps {
-                         script {
-                                sh 'mvn test'
-
-                }
-            }
-        }  */
-
         stage('Docker Compose') {
                      steps {
                          script {
@@ -72,7 +71,7 @@ pipeline{
                                 sh 'docker ps -aq | xargs docker start'
                 }
             }
-        } 
+        }  */
     }
 
     }
