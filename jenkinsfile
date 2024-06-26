@@ -32,8 +32,7 @@ pipeline{
                     env.SONAR_LOGIN = SECRET
                     }}
                     echo "Running SonarQube analysis" 
-                    sh "mvn clean install sonar:sonar \
-                        -Dsonar.login=${SONAR_LOGIN} \
+                    sh "-Dsonar.login=${SONAR_LOGIN} \
                         -Dsonar.host.url=http://localhost:9000 \
                         -Dsonar.projectKey=backend \
                         -Dsonar.projectName=backend \
