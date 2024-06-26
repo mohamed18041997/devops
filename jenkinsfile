@@ -30,16 +30,19 @@ pipeline{
                 script {
                     withCredentials([string(credentialsId: 'sonar', variable: 'SECRET')]) { 
                     env.SONAR_LOGIN = SECRET
-                    }
-                    def mavenHome = tool 'M2_HOME'}
+                    
+                    def mavenHome = tool 'M2_HOME'
                     echo "Running SonarQube analysis" 
-                    sh "${mavenHome}/mvn clean install sonar:sonar \
-                        -Dsonar.login=${SONAR_LOGIN} \
-                        -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.projectKey=backend \
-                        -Dsonar.projectName=backend \
-                        -Dsonar.verbose=true" 	                      
-                
+                    sh """
+                            ${mavenHome}/mvn clean install sonar:sonar \
+                                -Dsonar.login=${SONAR_LOGIN} \
+                                -Dsonar.host.url=http://localhost:9000 \
+                                -Dsonar.projectKey=backend \
+                                -Dsonar.projectName=backend \
+                                -Dsonar.verbose=true
+                        """
+	            }          
+            }
             }
         }   
     /*      stage('Publish to Nexus') {
