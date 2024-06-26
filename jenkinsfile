@@ -30,9 +30,9 @@ pipeline{
                 script {
                     withCredentials([string(credentialsId: 'sonar', variable: 'SECRET')]) { 
                     env.SONAR_LOGIN = SECRET
-                    }}
+                    }
+                    def mavenHome = tool 'M2_HOME'}
                     echo "Running SonarQube analysis" 
-                    def mavenHome = tool 'M2_HOME'
                     sh "${mavenHome}/mvn clean install sonar:sonar \
                         -Dsonar.login=${SONAR_LOGIN} \
                         -Dsonar.host.url=http://localhost:9000 \
