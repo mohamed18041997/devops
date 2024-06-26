@@ -30,7 +30,9 @@ pipeline{
          stage('Junit Test') {
                      steps {
                          script {
-                                sh 'mvn test'
+                             def mavenHome = tool 'M2_HOME'
+                             sh "echo 'Maven Home: ${mavenHome}'"
+                             sh "${mavenHome}/mvn test"
 
                 }
             }
