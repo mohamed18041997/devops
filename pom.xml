@@ -78,12 +78,13 @@
                     <tagNameFormat>v@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
-              <plugin>
-            <groupId>org.sonarsource.scanner.maven</groupId>
-            <artifactId>sonar-maven-plugin</artifactId>
-            <version>4.0.0.4121</version> <!-- Spécifiez une version compatible avec votre environnement -->
-        </plugin>
         </plugins>
     </build>
-
+  <distributionManagement>
+    <repository>
+        <id>deploymentRepo</id>
+        <name>maven-central-repository</name>
+        <url>http://localhost:8081/repository/maven-central-repository/</url>
+    </repository>
+    </distributionManagement>
 </project>
