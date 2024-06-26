@@ -7,7 +7,7 @@ pipeline{
                 echo "Cloning repository"
             }
         }
-        stage('Building the Maven project and Docker image') {
+       /*  stage('Building the Maven project and Docker image') {
             steps {
                 echo "Building the Maven project and Docker image"  
                 script {
@@ -24,7 +24,7 @@ pipeline{
                     sh "docker push mohamed1804/backend:1.0.0"
                 }
             }  
-        } 
+        }  */
        stage('SonarQube Analysis') {
             steps {
                 script {
