@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: devops
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p$MYSQL_ROOT_PASSWORD", "--protocol", "tcp"]
+      
+  backend:
+    image: mohamed1804/backend:1.0.0
+    container_name: backend-container
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/devops?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8082:8080"
+    depends_on:
+      - mysql
