@@ -33,8 +33,7 @@ pipeline{
                     }}
                     echo "Running SonarQube analysis" 
                     def mavenHome = tool 'M2_HOME'
-                    sh "echo 'Maven Home: ${mavenHome}'
-                        ${mavenHome}/mvn clean install sonar:sonar \
+                    sh "${mavenHome}/mvn clean install sonar:sonar \
                         -Dsonar.login=${SONAR_LOGIN} \
                         -Dsonar.host.url=http://localhost:9000 \
                         -Dsonar.projectKey=backend \
