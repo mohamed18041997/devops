@@ -13,16 +13,13 @@ pipeline{
                     withCredentials([string(credentialsId: 'sonar', variable: 'SECRET')]) { 
                     env.SONAR_LOGIN = SECRET
                     
-                    def mavenHome = tool 'M2_HOME'
-                    echo "Running SonarQube analysis" 
-                    sh """
-                            ${mavenHome}/mvn clean install sonar:sonar \
-                                -Dsonar.login=${SONAR_LOGIN} \
-                                -Dsonar.host.url=http://localhost:9000 \
-                                -Dsonar.projectKey=backend \
-                                -Dsonar.projectName=backend \
-                                -Dsonar.verbose=true
-                        """
+                    def scannerHome = tool 'SonarQube_Scanner'
+                        sh "${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.host.url=${env.SONAR_HOST_URL} \
+                            -Dsonar.login=${env.SONAR_TOKEN} \
+                            -Dsonar.projectKey=my-project-key \
+                            -Dsonar.projectName=my-project-name \
+                            -Dsonar.sources=src"
 	            }          
             }
             }
