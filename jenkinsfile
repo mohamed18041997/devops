@@ -32,7 +32,10 @@ pipeline{
                     env.SONAR_LOGIN = SECRET
                     }}
                     echo "Running SonarQube analysis" 
-                    sh "-Dsonar.login=${SONAR_LOGIN} \
+                    def mavenHome = tool 'M2_HOME'
+                    sh "echo 'Maven Home: ${mavenHome}'
+                        ${mavenHome}/mvn clean install sonar:sonar \
+                        -Dsonar.login=${SONAR_LOGIN} \
                         -Dsonar.host.url=http://localhost:9000 \
                         -Dsonar.projectKey=backend \
                         -Dsonar.projectName=backend \
