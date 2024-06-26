@@ -48,7 +48,9 @@ pipeline{
        stage('Publish to Nexus') {
                      steps {
                          script {
-                                sh 'mvn deploy -e -DskipTests'
+                                def mavenHome = tool 'M2_HOME'
+                                sh "echo 'Maven Home: ${mavenHome}'"
+                                sh "${mavenHome}/mvn deploy -e -DskipTests"
                                 echo 'Publish to Nexus'
 
                 }
