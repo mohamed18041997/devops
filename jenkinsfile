@@ -8,7 +8,7 @@ pipeline{
                 }
             }
         }
-        stage('Clone Repository') {
+      /*   stage('Clone Repository') {
             steps {
                 echo "Cloning repository"
             }
@@ -30,7 +30,7 @@ pipeline{
                     sh "docker push mohamed1804/backend:1.0.0"
                 }
             }  
-        }
+        } */
   /*       stage('SonarQube Analysis') {
             steps {
                 script {
