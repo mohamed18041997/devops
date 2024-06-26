@@ -7,7 +7,7 @@ pipeline{
                 echo "Cloning repository"
             }
         }
-        stage('SonarQube Analysis') {
+        /* stage('SonarQube Analysis') {
             steps {
                 script {
                     withCredentials([string(credentialsId: 'sonar', variable: 'SECRET')]) { 
@@ -26,8 +26,8 @@ pipeline{
 	            }          
             }
             }
-        } 
-       /*  stage('Junit Test') {
+        }  */
+         stage('Junit Test') {
                      steps {
                          script {
                                 sh 'mvn test'
@@ -71,7 +71,7 @@ pipeline{
                                 sh 'docker ps -aq | xargs docker start'
                 }
             }
-        }  */
+        } 
     }
 
     }
